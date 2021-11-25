@@ -1,0 +1,17 @@
+version: "3.7"
+services:
+  web:
+    build:
+      context: ./1.apache-php
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    volumes:
+      - ./4.www:/var/www
+      - ./domains/assets:/var/www/assets
+      - ./domains/cenlabv2:/var/www/cenlabv2
+    extra_hosts:
+      - "test.docker:127.0.0.1"
+      - "v2.docker:127.0.0.1"
+      - "assets.docker:127.0.0.1"
+      
