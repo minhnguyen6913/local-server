@@ -15,7 +15,7 @@ RUN yum --enablerepo=remi-php74 -y install php php-bcmath php-cli php-common php
 # Update Apache Configuration
 
 EXPOSE 80
-COPY /conf/site.conf /etc/httpd/conf.d/site.conf
+COPY /conf/*.conf /etc/httpd/conf.d/*.conf
 
 
 # Install libreoffice
