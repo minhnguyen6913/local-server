@@ -39,6 +39,10 @@ RUN mkdir /tmp/LibreOffice
 RUN tar -xzf LibreOffice_7.1.7_Linux_x86-64_rpm.tar.gz -C /tmp/LibreOffice
 RUN yum localinstall -y /tmp/LibreOffice/LibreOffice_7.1.7.2_Linux_x86-64_rpm/RPMS/*
 RUN rm -rf /tmp/LibreOffice
+## Run extra library for libre
+RUN yum install -y cairo-devel
+RUN yum -y install cups-filesystem
+RUN yum install -y java-11-openjdk-devel
 ## Copy sh for run convert pdf
 RUN mkdir /selinux/ 
 ADD doc2pdf.sh /selinux/
