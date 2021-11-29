@@ -1,5 +1,4 @@
 <?php
-/*
 $host = 'db';
 $user = 'root';
 $pass = 'root';
@@ -13,6 +12,5 @@ if (!$mysqli->connect_error) {
 }
 
 $mysqli->close();
-*/
 phpinfo();
 ?>

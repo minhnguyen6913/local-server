@@ -1,1 +1,0 @@
-soffice --convert-to pdf --outdir F:\local\domains\v2\uploads\hopdong  F:\local\domains\v2\uploads\hopdong\test.docx 2>&1
