@@ -1,1 +1,0 @@
-export HOME=/tmp && libreoffice7.1 --headless --convert-to pdf --outdir $1 $2
