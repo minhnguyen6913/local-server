@@ -32,6 +32,7 @@ libonig-dev && \
 libcurl4-openssl-dev \
 zip \
 openssl && \
+    libpq-dev && \
     rm -rf /var/lib/apt/lists/* && \
     curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
@@ -65,7 +66,7 @@ RUN docker-php-ext-install pdo_mysql && \
     docker-php-ext-install mbstring && \
     docker-php-ext-install gettext && \
     docker-php-ext-install calendar && \
-    docker-php-ext-install pdo && \
+    docker-php-ext-install pdo_pgsql && \
     docker-php-ext-install pdo_pgsql && \
     docker-php-ext-install exif
 
@@ -90,10 +91,7 @@ RUN a2enmod rewrite headers
 
 # Cleanup
 RUN rm -rf /usr/src/*
-# Add composer
-RUN curl -sS https://getcomposer.org/installer | php -- \
---install-dir=/usr/bin --filename=composer
-COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
+
 #pdf
 RUN apt-get -y update && \
     apt-get --no-install-recommends install -y libreoffice
