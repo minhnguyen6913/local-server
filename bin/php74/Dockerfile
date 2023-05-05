@@ -93,7 +93,8 @@ RUN curl -sS https://getcomposer.org/installer | php -- \
 --install-dir=/usr/bin --filename=composer
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 #pdf
-RUN apt install libreoffice
+RUN apt-get -y update && \
+    apt-get --no-install-recommends install -y libreoffice
 RUN mkdir /selinux
 
 ADD doc2pdf.sh /selinux/
