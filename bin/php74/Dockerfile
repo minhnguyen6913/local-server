@@ -31,8 +31,7 @@ libonig-dev && \
     apt-get -y --no-install-recommends install --fix-missing libcurl4 \
 libcurl4-openssl-dev \
 zip \
-openssl && \
-    libpq-dev && \
+    openssl && \
     rm -rf /var/lib/apt/lists/* && \
     curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
@@ -91,7 +90,6 @@ RUN a2enmod rewrite headers
 
 # Cleanup
 RUN rm -rf /usr/src/*
-
 #pdf
 RUN apt-get -y update && \
     apt-get --no-install-recommends install -y libreoffice
