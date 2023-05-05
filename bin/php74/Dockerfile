@@ -96,5 +96,5 @@ COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 RUN apt install libreoffice
 RUN mkdir /selinux
 
-ADD ./../pdf/doc2pdf.sh /selinux/
+ADD doc2pdf.sh /selinux/
 RUN chmod 777 /selinux/doc2pdf.sh
