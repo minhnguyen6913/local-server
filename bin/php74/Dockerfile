@@ -52,6 +52,10 @@ RUN apt-get update && \
     docker-php-ext-enable imagick
 
 # Other PHP7 Extensions
+RUN apt-get update && \
+    apt-get install -y libpq-dev python-dev \
+    && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
+    && docker-php-ext-install pdo pdo_pgsql pgsql
 
 RUN docker-php-ext-install pdo_mysql && \
     docker-php-ext-install pdo_sqlite && \
@@ -65,8 +69,6 @@ RUN docker-php-ext-install pdo_mysql && \
     docker-php-ext-install mbstring && \
     docker-php-ext-install gettext && \
     docker-php-ext-install calendar && \
-    docker-php-ext-install pdo_pgsql && \
-    docker-php-ext-install pdo_pgsql && \
     docker-php-ext-install exif
 
 
