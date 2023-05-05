@@ -65,7 +65,8 @@ RUN docker-php-ext-install pdo_mysql && \
     docker-php-ext-install mbstring && \
     docker-php-ext-install gettext && \
     docker-php-ext-install calendar && \
-    docker-php-ext-install pgsql && \
+    docker-php-ext-install pdo && \
+    docker-php-ext-install pdo_pgsql && \
     docker-php-ext-install exif
 
 
