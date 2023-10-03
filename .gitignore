@@ -1,4 +1,3 @@
-/*
 !.gitignore
 !/1.apache-php
 !/2.data
@@ -6,4 +5,4 @@
 !/4.www
 !/domains
 !5.docker-compose.sample
-!docker-compose.yml
+docker-compose.yml
