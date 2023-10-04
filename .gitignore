@@ -1,9 +1,9 @@
-!.gitignore
-!/1.apache-php
-!/2.data
-!/3.mysql
-!/4.www
-!/domains
-!5.docker-compose.sample
-docker-compose.yml
+/.env
+/.vscode
+/config/*
+/data/*
+/logs/*
+/www/**
+.DS_Store
+/buildtest
 .DS-Store
