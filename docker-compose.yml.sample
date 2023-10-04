@@ -19,7 +19,7 @@ services:
       - "v2.docker:127.0.0.1"
       - "assets.docker:127.0.0.1"
       - "cus3.docker:127.0.0.1"
-  phpmyadmin: 
+  phpmyadmin:
     container_name: phpmyadmin
     depends_on:
       - db
