@@ -2,7 +2,7 @@ FROM php:7.4.2-apache-buster
 
 # Surpresses debconf complaints of trying to install apt packages interactively
 # https://github.com/moby/moby/issues/4032#issuecomment-192327844
- 
+
 ARG DEBIAN_FRONTEND=noninteractive
 
 # Update
@@ -26,7 +26,7 @@ libicu-dev && \
 build-essential \
 git \
 curl \
-libonig-dev && \ 
+libonig-dev && \
     apt-get install -y iputils-ping && \
     apt-get -y --no-install-recommends install --fix-missing libcurl4 \
 libcurl4-openssl-dev \
@@ -52,6 +52,7 @@ RUN apt-get update && \
     docker-php-ext-enable imagick
 
 # Other PHP7 Extensions
+RUN apt-get update && apt-get install -y libpq-dev && docker-php-ext-install pdo pdo_pgsql
 
 RUN docker-php-ext-install pdo_mysql && \
     docker-php-ext-install pdo_sqlite && \
@@ -64,11 +65,30 @@ RUN docker-php-ext-install pdo_mysql && \
     docker-php-ext-install -j$(nproc) intl && \
     docker-php-ext-install mbstring && \
     docker-php-ext-install gettext && \
-    docker-php-ext-install calendar && \
-    docker-php-ext-install exif
+    docker-php-ext-install calendar
+
+RUN docker-php-ext-install bz2
+
+RUN    docker-php-ext-install dom
+RUN docker-php-ext-install fileinfo
+RUN    docker-php-ext-install filter
+
+RUN    docker-php-ext-install gd
+RUN    docker-php-ext-install gettext
+RUN    docker-php-ext-install iconv
+RUN    docker-php-ext-install json
 
 
-# Install Freetype 
+RUN docker-php-ext-install pcntl
+
+
+RUN docker-php-ext-install sockets
+RUN    docker-php-ext-install xml
+RUN docker-php-ext-install zip
+RUN docker-php-ext-install exif
+RUN docker-php-ext-install session
+
+# Install Freetype
 RUN apt-get -y update && \
     apt-get --no-install-recommends install -y libfreetype6-dev \
 libjpeg62-turbo-dev \
