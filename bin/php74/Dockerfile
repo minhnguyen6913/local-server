@@ -108,3 +108,15 @@ RUN a2enmod rewrite headers
 
 # Cleanup
 RUN rm -rf /usr/src/*
+
+
+# Install libreoffice
+## Install libreoffice
+#RUN apt install -y libreoffice
+## Run extra library for libre
+#RUN apt-get install -y cairo-devel
+#RUN apt-get install -y install cups-filesystem
+#RUN apt-get install -y java-11-openjdk-devel
+## Copy sh for run convert pdf
+#RUN mkdir /selinux/
+#ADD doc2pdf.sh /selinux/
