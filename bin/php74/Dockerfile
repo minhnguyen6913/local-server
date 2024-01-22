@@ -12,7 +12,7 @@ RUN apt-get -y update --fix-missing && \
     rm -rf /var/lib/apt/lists/*
 
 
-
+RUN apt-get update && apt-get install -y net-tools
 #RUN apt-get -y --no-install-recommends install libxinerama1
 #RUN apt-get -y --no-install-recommends install libdbus-1-dev
 #RUN apt-get -y --no-install-recommends install libcups2-dev

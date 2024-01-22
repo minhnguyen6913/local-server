@@ -30,6 +30,7 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
       - "test.local:127.0.0.1"
+      - "cenlabv2.local:127.0.0.1"
       - "cenlabv3.local:127.0.0.1"
       - "v3cenlab.local:127.0.0.1"
       - "alpha.local:127.0.0.1"
