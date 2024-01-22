@@ -8,3 +8,5 @@
 .DS_Store
 /buildtest
 .DS-Store
+
+docker-composer.yml

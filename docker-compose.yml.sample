@@ -30,11 +30,14 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
       - "test.local:127.0.0.1"
+      - "cenlabv2.local:127.0.0.1"
       - "cenlabv3.local:127.0.0.1"
       - "v3cenlab.local:127.0.0.1"
       - "alpha.local:127.0.0.1"
       - "ipt.local:127.0.0.1"
       - "cenlab.ipt.local:127.0.0.1"
+      - "old-v3.local:127.0.0.1"
+
   database:
     build:
       context: "./bin/${DATABASE}"
@@ -77,3 +80,7 @@ services:
     image: redis:latest
     ports:
       - "127.0.0.1:${HOST_MACHINE_REDIS_PORT}:6379"
+  gotenberg:
+      image: gotenberg/gotenberg:8
+      ports:
+        - "3000:3000"
