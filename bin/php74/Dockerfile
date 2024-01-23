@@ -57,11 +57,11 @@ RUN pecl install redis-5.1.1 && \
     docker-php-ext-enable redis
 
 # Install imagick
-RUN apt-get update && \
-    apt-get -y --no-install-recommends install --fix-missing libmagickwand-dev && \
-    rm -rf /var/lib/apt/lists/* && \
-    pecl install imagick && \
-    docker-php-ext-enable imagick
+#RUN apt-get update && \
+#    apt-get -y --no-install-recommends install --fix-missing libmagickwand-dev && \
+#    rm -rf /var/lib/apt/lists/* && \
+#    pecl install imagick && \
+#    docker-php-ext-enable imagick
 
 # Other PHP7 Extensions
 RUN apt-get update && apt-get install -y libpq-dev && docker-php-ext-install pdo pdo_pgsql
