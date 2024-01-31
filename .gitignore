@@ -5,8 +5,7 @@
 /data/*
 /logs/*
 /www/**
-.DS_Store
 /buildtest
 .DS-Store
-
+.DS_Store
 docker-compose.yml

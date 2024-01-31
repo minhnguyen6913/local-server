@@ -81,13 +81,14 @@ RUN docker-php-ext-install pdo_mysql && docker-php-ext-enable pdo_mysql && \
     docker-php-ext-install pgsql && docker-php-ext-enable pgsql && \
     docker-php-ext-install calendar && docker-php-ext-enable calendar
 
-RUN docker-php-ext-install bz2
-
-RUN    docker-php-ext-install dom
+# RUN docker-php-ext-install bz2
+# RUN    docker-php-ext-install gd
+# RUN    docker-php-ext-install dom
+# RUN    docker-php-ext-install xml
 RUN docker-php-ext-install fileinfo
 RUN    docker-php-ext-install filter
 
-RUN    docker-php-ext-install gd
+
 RUN    docker-php-ext-install iconv
 
 
@@ -95,7 +96,7 @@ RUN docker-php-ext-install pcntl
 
 
 RUN docker-php-ext-install sockets
-RUN    docker-php-ext-install xml
+
 RUN docker-php-ext-install zip
 RUN docker-php-ext-install exif
 RUN docker-php-ext-install session
@@ -121,23 +122,3 @@ RUN a2enmod rewrite headers
 # Cleanup
 RUN rm -rf /usr/src/*
 
-
-# Install libreoffice
-## Install libreoffice
-#RUN apt install -y libreoffice
-## Run extra library for libre
-#RUN apt-get install -y cairo-devel
-#RUN apt-get install -y install cups-filesystem
-#RUN apt-get install -y java-11-openjdk-devel
-## Copy sh for run convert pdf
-#RUN mkdir /selinux/
-#ADD doc2pdf.sh /selinux/
-
-## RUN apt-get update && apt-get install -y openssh-server
-##RUN mkdir /var/run/sshd
- ##RUN echo 'root:root123' | chpasswd
-##RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
-
-##EXPOSE 22
-
-##CMD ["/usr/sbin/sshd", "-D"]

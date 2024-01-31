@@ -1,4 +1,4 @@
-version: "3"
+version: "3.7"
 
 services:
   webserver:
@@ -46,9 +46,9 @@ services:
     ports:
       - "127.0.0.1:${HOST_MACHINE_MYSQL_PORT}:3306"
     volumes:
-      - ${MYSQL_INITDB_DIR-./config/initdb}:/docker-entrypoint-initdb.d
-      - ${MYSQL_DATA_DIR-./data/mysql}:/var/lib/mysql
-      - ${MYSQL_LOG_DIR-./logs/mysql}:/var/log/mysql
+      - ${MYSQL_INITDB_DIR-./config/initdb}:/docker-entrypoint-initdb.d:delegated
+      - ${MYSQL_DATA_DIR-./data/mysql}:/var/lib/mysql:delegated
+      - ${MYSQL_LOG_DIR-./logs/mysql}:/var/log/mysql:delegated
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
@@ -57,6 +57,7 @@ services:
   phpmyadmin:
     image: phpmyadmin
     container_name: "${COMPOSE_PROJECT_NAME}-phpmyadmin"
+    restart: "always"
     links:
       - database
     environment:
@@ -81,6 +82,7 @@ services:
     ports:
       - "127.0.0.1:${HOST_MACHINE_REDIS_PORT}:6379"
   gotenberg:
-      image: gotenberg/gotenberg:8
-      ports:
-        - "3000:3000"
+    image: gotenberg/gotenberg:8
+    ports:
+      - "3000:3000"
+    restart: "always"
