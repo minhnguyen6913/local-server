@@ -1,3 +1,3 @@
-FROM mysql:8.3.0
+FROM ubuntu/mysql:latest
 RUN echo "[mysqld]" >> /etc/mysql/my.cnf
 RUN echo "default-authentication-plugin=mysql_native_password" >> /etc/mysql/my.cnf

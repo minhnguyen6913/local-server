@@ -1,0 +1,14 @@
+version: "3.7"
+
+services:
+  sign:
+    build:
+      context: ./bin/sign
+    container_name: "${COMPOSE_PROJECT_NAME}-sign"
+    restart: "always"
+    ports:
+      - "8095:8005"
+      - "8099:8009"
+      - "8090:8080"
+    volumes:
+      - ./www/webapps:/usr/local/tomcat/webapps:rw

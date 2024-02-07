@@ -13,18 +13,6 @@ RUN apt-get -y update --fix-missing && \
 
 
 RUN apt-get update && apt-get install -y net-tools
-#RUN apt-get -y --no-install-recommends install libxinerama1
-#RUN apt-get -y --no-install-recommends install libdbus-1-dev
-#RUN apt-get -y --no-install-recommends install libcups2-dev
-#RUN apt-get -y --no-install-recommends install libx11-xcb-dev
-# RUN apt-get -y --no-install-recommends install default-jre libxinerama1 libdbus-1-dev libcups2-dev libx11-xcb-dev
-# libreoffice
-#WORKDIR /home
-# ADD  doc2pdf.sh /home
-#COPY  LibreOffice_7.6.4_Linux_x86-64_deb.tar.gz /home/
-#RUN tar -xvf LibreOffice_7.6.4_Linux_x86-64_deb.tar.gz -C /home/
-#RUN dpkg -i LibreOffice_7.6.4.1_Linux_x86-64_deb/DEBS/*.deb
-# Install useful tools and install important libaries
 RUN apt-get -y update && \
     apt-get -y --no-install-recommends install nano wget \
 dialog \
@@ -81,10 +69,7 @@ RUN docker-php-ext-install pdo_mysql && docker-php-ext-enable pdo_mysql && \
     docker-php-ext-install pgsql && docker-php-ext-enable pgsql && \
     docker-php-ext-install calendar && docker-php-ext-enable calendar
 
-# RUN docker-php-ext-install bz2
-# RUN    docker-php-ext-install gd
-# RUN    docker-php-ext-install dom
-# RUN    docker-php-ext-install xml
+
 RUN docker-php-ext-install fileinfo
 RUN    docker-php-ext-install filter
 
@@ -122,3 +107,8 @@ RUN a2enmod rewrite headers
 # Cleanup
 RUN rm -rf /usr/src/*
 
+
+# RUN docker-php-ext-install bz2
+# RUN    docker-php-ext-install gd
+# RUN    docker-php-ext-install dom
+# RUN    docker-php-ext-install xml
