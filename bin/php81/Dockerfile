@@ -86,7 +86,7 @@ RUN    docker-php-ext-install fileinfo && docker-php-ext-enable fileinfo
 # RUN    docker-php-ext-install pdo_pgsql && docker-php-ext-enable pdo_pgsql
 
 RUN docker-php-ext-install calendar  && docker-php-ext-enable calendar
-RUN  docker-php-ext-install tokenizer && docker-php-ext-enable tokenizer
+#RUN  docker-php-ext-install tokenizer && docker-php-ext-enable tokenizer
 RUN docker-php-ext-install fileinfo  && docker-php-ext-enable fileinfo
 RUN   docker-php-ext-install filter  && docker-php-ext-enable filter
 
