@@ -11,6 +11,8 @@ services:
       - "${HOST_MACHINE_SECURE_HOST_PORT}:443"
     links:
       - database
+      - gotenberg
+      - certbot
     volumes:
       - ${DOCUMENT_ROOT-./www}:/var/www/html:rw
       - ${PHP_INI-./config/php/php.ini}:/usr/local/etc/php/php.ini
@@ -29,14 +31,6 @@ services:
       XDEBUG_CONFIG: "client_host=host.docker.internal remote_port=${XDEBUG_PORT}"
     extra_hosts:
       - "host.docker.internal:host-gateway"
-      - "test.local:127.0.0.1"
-      - "cenlabv2.local:127.0.0.1"
-      - "cenlabv3.local:127.0.0.1"
-      - "v3cenlab.local:127.0.0.1"
-      - "alpha.local:127.0.0.1"
-      - "ipt.local:127.0.0.1"
-      - "cenlab.ipt.local:127.0.0.1"
-      - "old-v3.local:127.0.0.1"
 
   database:
     build:
@@ -86,3 +80,10 @@ services:
     ports:
       - "3000:3000"
     restart: "always"
+  certbot:
+    build:
+      context: "./bin/certbot"
+    container_name: certbot
+    volumes:
+      - ${SSL_DIR-./config/ssl}:/etc/letsencrypt
+      - ${DOCUMENT_ROOT-./www}:/var/www/html 
