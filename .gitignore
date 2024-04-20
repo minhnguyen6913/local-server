@@ -10,3 +10,4 @@
 .DS-Store
 .DS_Store
 docker-compose.yml
+.env
