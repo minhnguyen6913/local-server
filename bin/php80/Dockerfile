@@ -67,6 +67,9 @@ RUN cd /usr/local/src && \
     rm -rf imagick && \
     docker-php-ext-enable imagick
 
+#bzip2
+RUN apt-get update && apt-get install -y libbz2-dev
+RUN docker-php-ext-install bz2 && docker-php-ext-enable bz2
 # Other PHP8 Extensions
 
 RUN docker-php-ext-install pdo_mysql && docker-php-ext-enable pdo_mysql && \
@@ -120,6 +123,11 @@ RUN a2enmod ssl && a2enmod rewrite
 
 # Enable apache modules
 RUN a2enmod rewrite headers
+# Enable proxy
+RUN a2enmod proxy \
+    && a2enmod proxy_http \
+    && a2enmod proxy_balancer \
+    && a2enmod lbmethod_byrequests
 
 # Cleanup
 RUN rm -rf /usr/src/*

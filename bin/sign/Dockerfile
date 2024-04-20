@@ -1,5 +1,6 @@
-FROM tomcat:8.5.98-jdk8-temurin-focal
+FROM tomcat:8.5.99-jre8-temurin-jammy
+
 
 ADD sign-file-gateway.war /usr/local/tomcat/webapps
-
-ADD application.properties  /usr/local/tomcat/webapps/sign-file-gateway/WEB-INF/classes/
+#Allow execution (Not required, just added)
+CMD chmod +x /usr/local/tomcat/bin/catalina.sh

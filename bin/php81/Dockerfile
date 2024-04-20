@@ -67,7 +67,9 @@ RUN cd /usr/local/src && \
     docker-php-ext-enable imagick
 
 # Other PHP8 Extensions
-
+#bzip2
+RUN apt-get update && apt-get install -y libbz2-dev
+RUN docker-php-ext-install bz2 && docker-php-ext-enable bz2
 
 RUN docker-php-ext-install pdo_mysql && docker-php-ext-enable pdo_mysql && \
     docker-php-ext-install pdo_sqlite && docker-php-ext-enable pdo_sqlite && \
