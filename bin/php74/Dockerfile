@@ -11,8 +11,10 @@ RUN apt-get -y update --fix-missing && \
     apt-get --no-install-recommends install -y apt-utils && \
     rm -rf /var/lib/apt/lists/*
 
+RUN  apt update && apt upgrade -y
 
 RUN apt-get update && apt-get install -y net-tools
+RUN apt-get update && apt-get install -y telnet
 RUN apt-get -y update && \
     apt-get -y --no-install-recommends install nano wget \
 dialog \

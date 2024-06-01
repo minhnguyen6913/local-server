@@ -71,6 +71,7 @@ RUN cd /usr/local/src && \
 RUN apt-get update && apt-get install -y libbz2-dev
 RUN docker-php-ext-install bz2 && docker-php-ext-enable bz2
 # Other PHP8 Extensions
+RUN docker-php-ext-install pdo pdo_pgsql pgsql && docker-php-ext-enable pdo pdo_pgsql pgsql
 
 RUN docker-php-ext-install pdo_mysql && docker-php-ext-enable pdo_mysql && \
     docker-php-ext-install pdo_sqlite && docker-php-ext-enable pdo_sqlite && \
