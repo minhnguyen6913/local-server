@@ -1,4 +1,4 @@
-FROM php:8.1-apache-buster
+FROM php:8.1.29-apache-bullseye
 
 # Surpresses debconf complaints of trying to install apt packages interactively
 # https://github.com/moby/moby/issues/4032#issuecomment-192327844
@@ -10,6 +10,17 @@ RUN apt-get -y update --fix-missing && \
     apt-get upgrade -y && \
     apt-get --no-install-recommends install -y apt-utils && \
     rm -rf /var/lib/apt/lists/*
+
+
+#LIBRE OFFICE
+RUN apt-get update && \
+    apt-get install -y wget \
+    fontconfig && \
+    wget http://ftp.br.debian.org/debian/pool/contrib/m/msttcorefonts/ttf-mscorefonts-installer_3.8.1_all.deb && \
+    apt --fix-broken install -y ./ttf-mscorefonts-installer_3.8.1_all.deb && \
+    fc-cache -f -v
+
+RUN apt update && apt install libreoffice -y
 
 
 # Install useful tools and install important libaries
