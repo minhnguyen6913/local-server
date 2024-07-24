@@ -12,11 +12,11 @@ RUN apt-get -y update --fix-missing && \
     rm -rf /var/lib/apt/lists/*
 #LIBRE OFFICE
 RUN apt-get update && \
-   apt-get install -y wget \
-   fontconfig && \
-   wget http://ftp.br.debian.org/debian/pool/contrib/m/msttcorefonts/ttf-mscorefonts-installer_3.8.1_all.deb && \
-   apt --fix-broken install -y ./ttf-mscorefonts-installer_3.8.1_all.deb && \
-   fc-cache -f -v
+    apt-get install -y wget \
+    fontconfig && \
+    wget http://ftp.br.debian.org/debian/pool/contrib/m/msttcorefonts/ttf-mscorefonts-installer_3.8.1_all.deb && \
+    apt --fix-broken install -y ./ttf-mscorefonts-installer_3.8.1_all.deb && \
+    fc-cache -f -v
 
 RUN apt update && apt install libreoffice -y
 
@@ -68,6 +68,8 @@ RUN pecl install redis-5.1.1 && \
 
 # Other PHP7 Extensions
 RUN apt-get update && apt-get install -y libpq-dev && docker-php-ext-install pdo pdo_pgsql
+
+RUN docker-php-ext-install imap && docker-php-ext-enable imap
 
 RUN docker-php-ext-install pdo_mysql && docker-php-ext-enable pdo_mysql && \
     docker-php-ext-install pdo_sqlite && docker-php-ext-enable pdo_sqlite && \
