@@ -1,1 +1,1 @@
-FROM minhnguyen6913/lamp_webserver:latest
+FROM minhnguyen6913/lamp_webserver:7.4-amd64
