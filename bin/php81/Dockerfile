@@ -4,7 +4,17 @@ FROM php:8.1.29-apache-bullseye
 # https://github.com/moby/moby/issues/4032#issuecomment-192327844
 
 ARG DEBIAN_FRONTEND=noninteractive
+ARG PLATFORM
 
+RUN if [ "$PLATFORM" = "linux/arm64" ]; then \
+    curl -o ioncube.tar.gz http://downloads3.ioncube.com/loader_downloads/ioncube_loaders_lin_aarch64.tar.gz ; \
+    else \
+    curl -o ioncube.tar.gz http://downloads3.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz; \
+    fi
+RUN  tar -xvvzf ioncube.tar.gz \
+    && mv ioncube/ioncube_loader_lin_8.1.so `php-config --extension-dir` \
+    && rm -Rf ioncube.tar.gz ioncube \
+    && docker-php-ext-enable ioncube_loader_lin_8.1
 # Update
 RUN apt-get -y update --fix-missing && \
     apt-get upgrade -y && \
@@ -78,6 +88,17 @@ RUN cd /usr/local/src && \
     docker-php-ext-enable imagick
 
 # Other PHP8 Extensions
+#install library docker not support : https://github.com/mlocati/docker-php-extension-installer
+
+RUN curl -sSLf \
+    -o /usr/local/bin/install-php-extensions \
+    https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions && \
+    chmod +x /usr/local/bin/install-php-extensions
+RUN    install-php-extensions soap
+RUN    install-php-extensions pdo_pgsql
+RUN    install-php-extensions tokenizer
+RUN    install-php-extensions intl
+RUN    install-php-extensions pgsql
 #bzip2
 RUN apt-get update && apt-get install -y libbz2-dev
 RUN docker-php-ext-install bz2 && docker-php-ext-enable bz2
@@ -134,8 +155,13 @@ RUN a2enmod ssl && a2enmod rewrite
 # Enable apache modules
 RUN a2enmod rewrite headers
 
-# Cleanup
-RUN rm -rf /usr/src/*
-
 
 RUN apt-get update && apt-get install -y net-tools
+
+RUN  apt update && apt upgrade -y
+ADD doc2pdf.sh /selinux/
+
+RUN apt-get install -y  xfonts-utils
+
+# Cleanup
+RUN rm -rf /usr/src/*

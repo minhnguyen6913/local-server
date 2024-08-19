@@ -1,0 +1,75 @@
+version: '3.7'
+
+services:
+  webserver:
+    image: minhnguyen6913/lamp_webserver:7.4-v1-arm64
+    deploy:
+      restart_policy:
+        condition: any
+    ports:
+      - target: 80
+        published: ${HOST_MACHINE_UNSECURE_HOST_PORT}
+      - target: 443
+        published: ${HOST_MACHINE_SECURE_HOST_PORT}
+    networks:
+      - my_network
+    volumes:
+      - source: ${DOCUMENT_ROOT-./www}
+        target: /var/www/html
+        type: bind
+      - source: ${PHP_INI-./config/php/php.ini}
+        target: /usr/local/etc/php/php.ini
+        type: bind
+      - source: ${PHP_INI-./config/php/hosts}
+        target: /etc/hosts
+        type: bind
+      - source: ${SSL_DIR-./config/ssl}
+        target: /etc/apache2/ssl/
+        type: bind
+      - source: ${VHOSTS_DIR-./config/vhosts}
+        target: /etc/apache2/sites-enabled
+        type: bind
+      - source: ${LOG_DIR-./logs/apache2}
+        target: /var/log/apache2
+        type: bind
+      - source: ${XDEBUG_LOG_DIR-./logs/xdebug}
+        target: /var/log/xdebug
+        type: bind
+    environment:
+      APACHE_DOCUMENT_ROOT: ${APACHE_DOCUMENT_ROOT-/var/www/html}
+      PMA_PORT: ${HOST_MACHINE_PMA_PORT}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      HOST_MACHINE_MYSQL_PORT: ${HOST_MACHINE_MYSQL_PORT}
+      XDEBUG_CONFIG: "client_host=host.docker.internal remote_port=${XDEBUG_PORT}"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+networks:
+  my_network:
+
+volumes:
+  mysql-data:
+    driver: local
+
+configs:
+  php-config:
+    file: ${PHP_INI-./config/php/php.ini}
+
+secrets:
+  mysql_root_password:
+    external: true
+  mysql_user:
+    external: true
+  mysql_password:
+    external: true
+  mysql_database:
+    external: true
+  xdebug_port:
+    external: true
+  upload_limit:
+    external: true
+  memory_limit:
+    external: true
