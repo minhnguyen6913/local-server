@@ -1,9 +1,20 @@
-FROM php:8.3.9RC1-apache-bookworm
+FROM php:8.3.11-apache-bullseye
 
 # Surpresses debconf complaints of trying to install apt packages interactively
 # https://github.com/moby/moby/issues/4032#issuecomment-192327844
 
 ARG DEBIAN_FRONTEND=noninteractive
+
+RUN if [ "$PLATFORM" = "linux/arm64" ]; then \
+    curl -o ioncube.tar.gz http://downloads3.ioncube.com/loader_downloads/ioncube_loaders_lin_aarch64.tar.gz ; \
+    else \
+    curl -o ioncube.tar.gz http://downloads3.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz; \
+    fi
+RUN  tar -xvvzf ioncube.tar.gz \
+    && mv ioncube/ioncube_loader_lin_8.3.so `php-config --extension-dir` \
+    && rm -Rf ioncube.tar.gz ioncube \
+    && docker-php-ext-enable ioncube_loader_lin_8.3
+
 
 
 RUN apt-get -y update --fix-missing && \
@@ -24,7 +35,6 @@ RUN apt-get -y update && \
     libicu-dev && \
     apt-get -y --no-install-recommends install --fix-missing apt-utils \
     build-essential \
-    git \
     curl \
     libonig-dev && \
     apt-get install -y iputils-ping && \
@@ -34,6 +44,7 @@ RUN apt-get -y update && \
     openssl && \
     rm -rf /var/lib/apt/lists/* && \
     curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
 
 # Install xdebug
 RUN pecl install xdebug-3.3.2 && \
@@ -45,6 +56,17 @@ RUN pecl install redis && \
     docker-php-ext-enable redis
 
 # Other PHP8 Extensions
+RUN curl -sSLf \
+    -o /usr/local/bin/install-php-extensions \
+    https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions && \
+    chmod +x /usr/local/bin/install-php-extensions
+RUN    install-php-extensions soap
+RUN    install-php-extensions pdo_pgsql
+RUN    install-php-extensions tokenizer
+RUN    install-php-extensions intl
+RUN    install-php-extensions pgsql
+RUN    install-php-extensions imap
+RUN    install-php-extensions ldap
 #bzip2
 RUN apt-get update && apt-get install -y libbz2-dev
 RUN docker-php-ext-install bz2 && docker-php-ext-enable bz2
@@ -107,13 +129,6 @@ RUN a2enmod rewrite headers
 RUN rm -rf /usr/src/*
 
 
-
-# RUN docker-php-ext-install bz2
-# RUN    docker-php-ext-install gd
-# RUN    docker-php-ext-install dom
-# RUN    docker-php-ext-install xml
-
-
 #LIBRE OFFICE
 RUN apt-get update && \
     apt-get install -y wget \
@@ -126,7 +141,9 @@ RUN apt update && apt install libreoffice -y
 
 
 
-RUN  apt update && apt upgrade -y
+
 ADD doc2pdf.sh /selinux/
 
 RUN apt-get install -y  xfonts-utils
+
+RUN  apt update && apt upgrade -y

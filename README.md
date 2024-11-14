@@ -169,8 +169,8 @@ May differ for PHP Versions <7.x.x
 
 phpMyAdmin is configured to run on port 8080. Use following default credentials.
 
-http://localhost:8080/  
-username: root  
+http://localhost:8080/
+username: root
 password: tiger
 
 ## Xdebug
@@ -293,3 +293,6 @@ In Production you should modify at a minimum the following subjects:
 
 - php handler: mod_php=> php-fpm
 - secure mysql users with proper source IP limitations
+
+
+docker build -t php83 .

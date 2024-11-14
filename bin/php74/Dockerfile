@@ -21,7 +21,7 @@ RUN curl -sSLf \
     https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions && \
     chmod +x /usr/local/bin/install-php-extensions
 RUN    install-php-extensions soap
-
+RUN    install-php-extensions ldap
 
 RUN apt-get -y update --fix-missing && \
     apt-get upgrade -y && \
