@@ -11,17 +11,26 @@ RUN if [ "$PLATFORM" = "linux/arm64" ]; then \
     else \
     curl -o ioncube.tar.gz http://downloads3.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz; \
     fi
-RUN tar -xvvzf ioncube.tar.gz \
+RUN  tar -xvvzf ioncube.tar.gz \
     && mv ioncube/ioncube_loader_lin_7.4.so `php-config --extension-dir` \
     && rm -Rf ioncube.tar.gz ioncube \
     && docker-php-ext-enable ioncube_loader_lin_7.4
 
+RUN curl -sSLf \
+    -o /usr/local/bin/install-php-extensions \
+    https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions && \
+    chmod +x /usr/local/bin/install-php-extensions
+RUN    install-php-extensions soap
+RUN    install-php-extensions ldap
 
 RUN apt-get -y update --fix-missing && \
     apt-get upgrade -y && \
     apt-get --no-install-recommends install -y apt-utils && \
     rm -rf /var/lib/apt/lists/*
 
+
+RUN apt-get update && apt-get install -y net-tools
+RUN apt-get update && apt-get install -y telnet
 RUN apt-get -y update && \
     apt-get -y --no-install-recommends install nano wget \
     dialog \
@@ -33,21 +42,17 @@ RUN apt-get -y update && \
     libicu-dev && \
     apt-get -y --no-install-recommends install --fix-missing apt-utils \
     build-essential \
+    git \
     curl \
     libonig-dev && \
     apt-get install -y iputils-ping && \
     apt-get -y --no-install-recommends install --fix-missing libcurl4 \
     libcurl4-openssl-dev \
+    zip \
+    unzip \
     openssl && \
     rm -rf /var/lib/apt/lists/* && \
     curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-#php install helper
-RUN curl -sSLf \
-    -o /usr/local/bin/install-php-extensions \
-    https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions && \
-    chmod +x /usr/local/bin/install-php-extensions
-
-
 
 # Install xdebug
 RUN pecl install xdebug-3.1.4 && \
@@ -58,18 +63,26 @@ RUN pecl install xdebug-3.1.4 && \
 RUN pecl install redis-5.1.1 && \
     docker-php-ext-enable redis
 
+# Install imagick
+#RUN apt-get update && \
+#    apt-get -y --no-install-recommends install --fix-missing libmagickwand-dev && \
+#    rm -rf /var/lib/apt/lists/* && \
+#    pecl install imagick && \
+#    docker-php-ext-enable imagick
+
 # Other PHP7 Extensions
 RUN apt-get update && apt-get install -y libpq-dev && docker-php-ext-install pdo pdo_pgsql
 
 # Enable php-imap
-RUN  apt-get update && \
+RUN apt-get update && \
     apt-get install -y \
     libc-client-dev libkrb5-dev && \
     rm -r /var/lib/apt/lists/*
 
+
 RUN docker-php-ext-configure imap --with-kerberos --with-imap-ssl
-RUN docker-php-ext-install -j$(nproc) imap  && \
-    docker-php-ext-install pdo_mysql && docker-php-ext-enable pdo_mysql && \
+RUN docker-php-ext-install -j$(nproc) imap
+RUN docker-php-ext-install pdo_mysql && docker-php-ext-enable pdo_mysql && \
     docker-php-ext-install pdo_sqlite && docker-php-ext-enable pdo_sqlite && \
     docker-php-ext-install bcmath && docker-php-ext-enable bcmath && \
     docker-php-ext-install mysqli && docker-php-ext-enable mysqli && \
@@ -82,17 +95,8 @@ RUN docker-php-ext-install -j$(nproc) imap  && \
     docker-php-ext-install gettext && docker-php-ext-enable gettext && \
     docker-php-ext-install fileinfo && docker-php-ext-enable fileinfo && \
     docker-php-ext-install pgsql && docker-php-ext-enable pgsql && \
-    docker-php-ext-install calendar && docker-php-ext-enable calendar  && \
-    docker-php-ext-install pdo && docker-php-ext-enable pdo  && \
-    docker-php-ext-install pdo_pgsql && docker-php-ext-enable pdo_pgsql  && \
-    docker-php-ext-install session && docker-php-ext-enable session
+    docker-php-ext-install calendar && docker-php-ext-enable calendar
 
-#RUN docker-php-ext-install filter
-#RUN docker-php-ext-install iconv
-#RUN docker-php-ext-install pcntl
-#RUN docker-php-ext-install sockets
-#RUN docker-php-ext-install exif
-#RUN docker-php-ext-install session
 
 
 
@@ -108,24 +112,27 @@ RUN apt-get -y update && \
 # Insure an SSL directory exists
 RUN mkdir -p /etc/apache2/ssl
 
-# Enable SSL support && apache modules
-RUN a2enmod ssl && a2enmod rewrite && a2enmod rewrite headers
+# Enable SSL support
+RUN a2enmod ssl && a2enmod rewrite
 
-RUN apt update && apt upgrade -y
+# Enable apache modules
+RUN a2enmod rewrite headers
+RUN  apt update && apt upgrade -y
+# Cleanup
+RUN rm -rf /usr/src/*
 
 
-# FONT
+
+#LIBRE OFFICE
+RUN apt-get install -y  xfonts-utils
 RUN apt-get update && \
-    apt-get install -y wget xfonts-utils \
+    apt-get install -y wget \
     fontconfig && \
     wget http://ftp.br.debian.org/debian/pool/contrib/m/msttcorefonts/ttf-mscorefonts-installer_3.8.1_all.deb && \
     apt --fix-broken install -y ./ttf-mscorefonts-installer_3.8.1_all.deb && \
     fc-cache -f -v
 
-RUN apt-get update &&\
-    apt-get install -y --no-install-recommends  libreoffice
-WORKDIR /selinux/
-COPY bin/assets/libreoffice/doc2pdf.sh /selinux/
-# Cleanup
-RUN rm -rf /usr/src/*
+RUN apt-get update && \
+    apt-get install -y libreoffice 
 
+ADD doc2pdf.sh /selinux/
