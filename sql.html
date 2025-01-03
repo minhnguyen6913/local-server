@@ -1,0 +1,36 @@
+BEGIN
+declare finished int default 0;
+declare checkMauId int;
+declare yearHopdong int;
+declare inCodeLatest int;
+declare checkIncode TINYINT DEFAULT 1;
+declare sample_data cursor for select mau_id from mau where hopdong_id = par_hopdong_id and mau_incode is null;
+
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET finished = 1;
+
+select year(hopdong_date) from hopdong where hopdong_id = par_hopdong_id INTO yearHopdong;
+
+open sample_data;
+setIncode: LOOP
+FETCH sample_data INTO checkMauId;
+IF finished = 1 THEN
+LEAVE setIncode;
+END IF;
+############## Handle #########################
+############## get latest incode ###################
+WHILE checkIncode = 1 DO
+select max(COALESCE(mau_incode,0)) + 1 as lastest from mau where mau_year = yearHopdong into inCodeLatest;
+IF NOT EXISTS(select mau_id from mau where mau_incode = inCodeLatest and mau_year = yearHopdong) THEN
+set checkIncode = 0;
+END IF;
+END WHILE;
+set checkIncode = 1; # SET FOR NEXT CHECK
+
+update mau set mau_incode = inCodeLatest, mau_year = yearHopdong, mau_incode_slug = CONCAT_WS('-',
+yearHopdong,inCodeLatest)
+
+where mau_id = checkMauId and mau_incode is null;
+END LOOP setIncode;
+CLOSE sample_data;
+
+END
